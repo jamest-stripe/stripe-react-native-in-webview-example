@@ -7,13 +7,13 @@ To run the app please install the depedencies and start Expo.
 
 Stripe's implementation of ApplePay via Payment Element and Express Checkout Element does work within React Native WebView. To enable ApplePay access the WebView component must include the `EnableApplePay` option set to `true`:
 
-> `<WebView
+> <WebView
 
     source={{ uri: "https://stripedemos.com" }}
     style={{ flex: 1 }}
     enableApplePay={true}
 
-/>`
+/>
 
 (https://github.com/react-native-webview/react-native-webview/blob/master/docs/Reference.md#enableapplepay).
 
