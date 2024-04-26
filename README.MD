@@ -5,18 +5,12 @@ To run the app please install the depedencies and start Expo.
 1. npm i
 2. npx expo start
 
-Stripe's implementation of ApplePay via Payment Element and Express Checkout Element does work within React Native WebView. To enable ApplePay access the WebView component must include the `EnableApplePay` option set to `true`:
+Stripe's implementation of ApplePay via Payment Element and Express Checkout Element does work within React Native WebView. To enable ApplePay access the WebView component must include the `EnableApplePay` option set to `true`, however this results in a trade-off in the disabling of JS injection into the WebView.
+
+This approach uses a `PostMessage` event to trigger a hand off to Stripe's React Native SDK, to initalise a payment form that renders both express checkout elements e.g. Apple Pay/GooglePay and payment methods that require entry e.g. card, AU BECS, WeChat Pay, etc.
+
+A compiled Andriod demo is included within the `app_artifacts` folder. To test using an iOS device you will need to compile using EAS Build to generate a signed ad-hoc app.
 
 ```
-<WebView
-source={{ uri: "https://stripedemos.com" }}
-style={{ flex: 1 }}
-enableApplePay={true}
-/>
+eas build --profile preview  --platform ios
 ```
-
-(https://github.com/react-native-webview/react-native-webview/blob/master/docs/Reference.md#enableapplepay).
-
-## GooglePay Note
-
-It is worth highlighting that rendering a GooglePay button is (at present) a little more involved as you need to utilise Android Custom Tabs to enable trusted access to Google Pay (https://developer.chrome.com/docs/android/custom-tabs), there are a couple of RN libraries that enable this e.g. https://github.com/droibit/react-native-custom-tabs. Though it is worth highlighting that the Payment Element does enable autofill from Google Wallet when card is selected.

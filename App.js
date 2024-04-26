@@ -16,6 +16,7 @@ export default function App() {
 		initStripe({
 			publishableKey:
 				"pk_test_51Me6XAHdJokNZ98tzjQti0Ln3JNqvf8fqnAJ2VPm9oRzmgWEvjnUOZPubjpmSPVGE7bzAQSi5XDOCQkdh9imQit6001p6Hlk04",
+			merchantIdentifier: "merchant.stripedemos.com.energydemo",
 		});
 	}, []);
 
@@ -28,7 +29,6 @@ export default function App() {
 				applePay: {
 					merchantCountryCode: "AU",
 				},
-
 				merchantDisplayName: "Power Co",
 				paymentIntentClientSecret: message.clientSecret,
 				returnURL: "https://betaorigindemo.stripedemos.com/success",
