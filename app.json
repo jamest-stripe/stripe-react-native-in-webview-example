@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.stripedemos.energydemo"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,6 +27,20 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "@stripe/stripe-react-native",
+        {
+          "enableGooglePay": true,
+          "merchantIdentifier": "merchant.stripedemos.com.energydemo"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "5e0d361e-3d46-40fe-988d-4df99d2665d4"
+      }
     }
   }
 }

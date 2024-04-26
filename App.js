@@ -25,9 +25,10 @@ export default function App() {
 		if (message.action === "make_payment") {
 			// Initialize the payment sheet
 			const { error } = await initPaymentSheet({
-				customerId: "cus_NOumxVF9M1Wi1b",
-				customerEphemeralKeySecret:
-					"ek_test_YWNjdF8xTWU2WEFIZEpva05aOTh0LHl0dGhMWjlZcEU1YVFDdVMyd0dKMGRCd28zbE45U1M_00jwPlkFYy",
+				applePay: {
+					merchantCountryCode: "AU",
+				},
+
 				merchantDisplayName: "Power Co",
 				paymentIntentClientSecret: message.clientSecret,
 				returnURL: "https://betaorigindemo.stripedemos.com/success",
