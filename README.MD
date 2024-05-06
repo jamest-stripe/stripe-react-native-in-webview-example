@@ -14,7 +14,7 @@ npm i
 npx expo start
 ```
 
-A fully compiled and built Android version of the application is included within the app_artifacts folder.
+A fully compiled and built Android version of the application is included within the `app_artifacts` folder.
 
 The website code is included within the `website` directory. To set-up and run the site:
 
