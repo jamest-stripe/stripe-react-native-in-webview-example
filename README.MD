@@ -19,6 +19,9 @@ A fully compiled and built Android version of the application is included within
 The website code is included within the `website` directory. To set-up and run the site:
 
 ```
+cp .env.local .env
+//update with your Stripe Keys
+
 cd website
 yarn
 yarn dev
