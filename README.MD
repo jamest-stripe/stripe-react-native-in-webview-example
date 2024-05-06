@@ -1,16 +1,17 @@
-# React Native WebView ApplePay Payment App
+# React Native WebView Wallet Payment App
 
 To run the app please install the depedencies and start Expo.
 
-1. npm i
-2. npx expo start
+cd app_code
+npm i
+npx expo start
 
-Stripe's implementation of ApplePay via Payment Element and Express Checkout Element does work within React Native WebView. To enable ApplePay access the WebView component must include the `EnableApplePay` option set to `true`, however this results in a trade-off in the disabling of JS injection into the WebView.
+A fully compiled and built Android version of the application is included within the app_artifacts folder.
 
-This approach uses a `PostMessage` event to trigger a hand off to Stripe's React Native SDK, to initalise a payment form that renders both express checkout elements e.g. Apple Pay/GooglePay and payment methods that require entry e.g. card, AU BECS, WeChat Pay, etc.
-
-A compiled Andriod demo is included within the `app_artifacts` folder. To test using an iOS device you will need to compile using EAS Build to generate a signed ad-hoc app.
+The website code is included within the `website` directory. To set-up and run the site:
 
 ```
-eas build --profile preview  --platform ios
+cd website
+yarn
+yarn dev
 ```
