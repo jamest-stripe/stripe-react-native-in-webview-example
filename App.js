@@ -1,16 +1,20 @@
 import { StatusBar } from "expo-status-bar";
-import { View } from "react-native";
 import { WebView } from "react-native-webview";
-import React, { useEffect } from "react";
-import { Alert } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, Platform, View } from "react-native";
 import {
 	initStripe,
 	useStripe,
-	PaymentSheet,
+	usePlatformPay,
 } from "@stripe/stripe-react-native";
 
 export default function App() {
 	const { initPaymentSheet, presentPaymentSheet } = useStripe();
+	const [wallet, setWallet] = useState(false);
+	const [deviceType, setDeviceType] = useState(null);
+	const [walletUrl, setWalletUrl] = useState(
+		"https://jamest-origin.tunnel.stripe.me/wallet?wallet=false"
+	);
 
 	useEffect(() => {
 		initStripe({
@@ -20,14 +24,50 @@ export default function App() {
 		});
 	}, []);
 
+	const { isPlatformPaySupported, confirmPlatformPayPayment } =
+		usePlatformPay();
+
+	//check if platformpayments are supported and return result in an alert screen
+	const checkPlatformPay = async () => {
+		const result = await isPlatformPaySupported();
+		if (result === true) {
+			setWalletUrl("https://jamest-origin.tunnel.stripe.me/wallet?wallet=true");
+		} else {
+			setWalletUrl(
+				"https://jamest-origin.tunnel.stripe.me/wallet?wallet=false"
+			);
+		}
+
+		// Alert.alert(`Wallet Enabled?: ${wallet ? "Yes" : "No"}, url: ${walletUrl}`);
+	};
+
+	// Handle the message posted from the webview
+
 	const onMessage = async (event) => {
 		const message = JSON.parse(event.nativeEvent.data);
+		if (message.action === "gpay_payment") {
+			// Initialize the wallet
+			const { error } = await confirmPlatformPayPayment(message.clientSecret, {
+				googlePay: {
+					testEnv: true,
+					merchantName: "Power Co",
+					merchantCountryCode: "AU",
+					currencyCode: "AUD",
+				},
+			});
+			if (error) {
+				Alert.alert(`Error code: ${error.code}`, error.message);
+			} else {
+				Alert.alert("Success", "The payment was confirmed successfully");
+			}
+		}
 
 		if (message.action === "make_payment") {
 			// Initialize the payment sheet
 			const { error } = await initPaymentSheet({
 				applePay: {
 					merchantCountryCode: "AU",
+					enabled: true,
 				},
 				merchantDisplayName: "Power Co",
 				paymentIntentClientSecret: message.clientSecret,
@@ -36,7 +76,7 @@ export default function App() {
 					merchantCountryCode: "AU",
 					testEnv: true, // use test environment
 				},
-				applePay: true,
+
 				defaultBillingDetails: {
 					name: "James Tomlinson",
 					email: "james@customer.com",
@@ -55,13 +95,17 @@ export default function App() {
 	};
 	return (
 		<View style={{ flex: 1 }}>
-			<WebView
-				source={{ uri: "https://betaorigindemo.stripedemos.com" }}
-				style={{ flex: 1 }}
-				// enableApplePay={true}
-				onMessage={onMessage}
-			/>
 			<StatusBar style="auto" />
+			<WebView
+				source={{
+					uri: walletUrl,
+				}}
+				style={{ flex: 1 }}
+				onMessage={onMessage}
+				javaScriptEnabled={true}
+				originWhitelist={["*"]}
+				onLoadStart={() => checkPlatformPay()}
+			/>
 		</View>
 	);
 }
