@@ -6,6 +6,7 @@ import {
 	initStripe,
 	useStripe,
 	usePlatformPay,
+	PlatformPay,
 } from "@stripe/stripe-react-native";
 
 export default function App() {
@@ -48,6 +49,18 @@ export default function App() {
 		if (message.action === "gpay_payment") {
 			// Initialize the wallet
 			const { error } = await confirmPlatformPayPayment(message.clientSecret, {
+				applePay: {
+					cartItems: [
+						{
+							label: "Electricity Bill",
+							amount: "374.48",
+							paymentType: "Immediate",
+						},
+					],
+					merchantName: "Power Co",
+					merchantCountryCode: "AU",
+					currencyCode: "AUD",
+				},
 				googlePay: {
 					testEnv: true,
 					merchantName: "Power Co",
